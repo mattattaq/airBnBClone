@@ -4,7 +4,6 @@ const express = require('express');
 console.log('listings', listings);
 const app = express();
 
-
 // middleware
 app.use(express.json());
 
@@ -30,11 +29,21 @@ app.post('/listings/add', function(req, res){
     res.send(listings);
 });
 
+// post to reserve
+app.post('/listings/reserve/:id', (req, res) => {
+    const listing = listings.find(l => l.id === parseInt(req.params.id));
+    if(!listing) return res.status(404).send('Cannot find that listing');
+
+    // date parsing, is it available?
+    console.log(listing);
+    res.send(`You've successfully booked ${listing.name}`);
+})
+
 // put
 app.put('/api/listings/:id', (req, res) => {
-    // look up course
+    // look up Listing
     const listings = listings.find(l => l.id === parseInt(req.params.id));
-    if(!listings) return res.status(404).send('Course not found');
+    if(!listings) return res.status(404).send('Listing not found');
 
     const { error } = validateListing(req.body);
     if (error) {
@@ -42,27 +51,12 @@ app.put('/api/listings/:id', (req, res) => {
         return;
     }
 
-    // update course
-    course.name = req.body.name;
-    // return the updated course to the client
-    res.send(course);
+    // update Listing
+    listings.name = req.body.name;
+    // return the updated listing to the client
+    res.send(listings);
 });
 
-// delete
-app.delete('/api/listings/:id', (req, res) => {
-    // look up the course
-    // doesn't exist, return 404
-    // const course = listings.find(c => c.id === parseInt(req.params.id));
-    // if(!course) return res.status(404).send('Course not found');
-    
-    // // delete
-    // const index = listings.indexOf(course);
-    // listings.splice(index, 1);
-
-    // // return the same course
-    // res.send(course);
-
-});
 // PORT
 const port = process.env.PORT || 3000
 app.listen(port, () => console.log(`Listening on port ${port}...`));

@@ -1,96 +1,32 @@
 const listings = [
     {
         id: 1,
-        name: 'course 1',
+        name: 'Dracula\'s Castle',
+        type: "2 bedroom",
         availability: {
-            booked: [],
-            available: []
+            booked: ["05/22/2022 - 05/24/2022", "05/26/2022", '5/29/2022'],
         },
-        address: "",
-        ownerInfo: {
-            name: "",
-            phoneNumber: ""
-        },
-        media: {
-            img: "",
-            title: "",
-            photos: [
-                {
-                    img: "",
-                    title: ""
-                },
-                {
-                    img: "",
-                    title: ""
-                },
-                {
-                    img: "",
-                    title: ""
-                },
-            ]
-        }
+        address: "666 E. Blood Drive, Transulvania, Romania",
     },
     {
         id: 2,
-        name: 'course 1',
+        name: 'Frankenstein\'s Castle',
+        type: "3 bedroom",
         availability: {
             booked: [],
             available: []
         },
         address: "",
-        ownerInfo: {
-            name: "",
-            phoneNumber: ""
-        },
-        media: {
-            img: "",
-            title: "",
-            photos: [
-                {
-                    img: "",
-                    title: ""
-                },
-                {
-                    img: "",
-                    title: ""
-                },
-                {
-                    img: "",
-                    title: ""
-                },
-            ]
-        }
     },
     {
         id: 3,
-        name: 'course 1',
+        name: '123 Fast length, Dr, Fort Collins, CO 80522',
+        type: "2 bedroom",
         availability: {
             booked: [],
             available: []
         },
         address: "",
-        ownerInfo: {
-            name: "",
-            phoneNumber: ""
-        },
-        media: {
-            img: "",
-            title: "",
-            photos: [
-                {
-                    img: "",
-                    title: ""
-                },
-                {
-                    img: "",
-                    title: ""
-                },
-                {
-                    img: "",
-                    title: ""
-                },
-            ]
-        }
     }
 ];
 
