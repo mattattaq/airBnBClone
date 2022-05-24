@@ -1,7 +1,6 @@
 const Joi = require('joi');
 const { listings, addListing, reserve } = require('./Listings');
 const express = require('express');
-console.log('listings', listings);
 const app = express();
 
 // middleware
@@ -15,7 +14,7 @@ app.get('/listings', (req, res) => {
 // /api/listings/1
 app.get('/api/listings/:id', (req, res) => {
     const listing = listings.find(l => l.id === parseInt(req.params.id));
-    if(!listing) return res.status(404).send('Course not found');
+    if(!listing) return res.status(404).send('Listing not found');
     res.send(listing);
     
 });
@@ -34,10 +33,38 @@ app.post('/listings/reserve/:id', (req, res) => {
     const listing = listings.find(l => l.id === parseInt(req.params.id));
     if(!listing) return res.status(404).send('Cannot find that listing');
 
+    const now = new Date();
+
+    // evaluate returned dates
+    const bookedDates = listing.availability.booked.map(date => new Date(date))
+    const reserveDates = req.body.reserveDates ?
+        new Date(req.body.reserveDates) : res.status(404).send('Malformed Body');
+
+    // is reservation before today?
+    if(reserveDates < now) return res.send('No time travelling allowed');
+    const { error } = validateReservation(bookedDates, reserveDates);
+    
     // date parsing, is it available?
-    console.log(listing);
-    res.send(`You've successfully booked ${listing.name}`);
-})
+    if(bookedDates.find(d => d.toDateString() === reserveDates.toDateString())) {
+        res.send("Please pick another date");
+    } else {
+        res.send(`You've successfully booked ${listing.name}`);
+        // reserveNow
+        // reserve(listing, reserveDate);
+    }
+
+});
+
+
+function validateReservation(bookedDates, reserveDates) {
+    console.log(bookedDates, ' bookedDates');
+    console.log(reserveDates, ' reserveDates');
+    const schema = {
+        reserveDate: Joi.date().iso(),
+        bookedDates: Joi.date().iso()
+    }
+    return result = Joi.validate(reserveDates, schema);
+}
 
 // put
 app.put('/api/listings/:id', (req, res) => {
@@ -64,8 +91,7 @@ app.listen(port, () => console.log(`Listening on port ${port}...`));
 function validateListing(listings) {
     // validate
     const schema = {
-        name: Joi. string().min(3).required(),
-
+        name: Joi.string().min(3).required()
     };
     return result = Joi.validate(listings, schema);
 }

@@ -4,7 +4,7 @@ const listings = [
         name: 'Dracula\'s Castle',
         type: "2 bedroom",
         availability: {
-            booked: ["05/22/2022 - 05/24/2022", "05/26/2022", '5/29/2022'],
+            booked: ["05/22/2022", "05/23/2022", "05/24/2022", "05/26/2022", '5/29/2022'],
         },
         address: "666 E. Blood Drive, Transulvania, Romania",
     },
@@ -40,7 +40,7 @@ function addListing(listing) {
 }
 
 // reserve listing
-function reserve(name, reserveDates, contactInfo) {
+function reserve(listing, reservedDates) {
     // validate dates
     // add bookedBy
     // add reserve dates (update booked dates / remove from available dates)
