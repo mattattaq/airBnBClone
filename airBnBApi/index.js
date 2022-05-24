@@ -50,7 +50,7 @@ app.post('/listings/reserve/:id', (req, res) => {
     } else {
         res.send(`You've successfully booked ${listing.name}`);
         // reserveNow
-        // reserve(listing, reserveDate);
+        reserve(listing, reserveDates);
     }
 
 });

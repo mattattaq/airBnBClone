@@ -41,11 +41,11 @@ function addListing(listing) {
 
 // reserve listing
 function reserve(listing, reservedDates) {
-    // validate dates
-    // add bookedBy
-    // add reserve dates (update booked dates / remove from available dates)
+    // find entry
+    const listEntry = listings.find(l => l.id === parseInt(listing.id));
     // update object
+    listEntry.availability.booked.push(reservedDates);
 }
 
-module.exports = { listings, addListing };
+module.exports = { listings, reserve, addListing };
 
