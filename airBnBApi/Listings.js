@@ -14,9 +14,8 @@ const listings = [
         type: "3 bedroom",
         availability: {
             booked: [],
-            available: []
         },
-        address: "",
+        address: "Nieder-Beerbach, DE",
     },
     {
         id: 3,
@@ -24,7 +23,6 @@ const listings = [
         type: "2 bedroom",
         availability: {
             booked: [],
-            available: []
         },
         address: "",
     }

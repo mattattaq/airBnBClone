@@ -12,7 +12,7 @@ get a list of available listings
 add a listing
 
 ### /listings/reserve
-wip
+add your booking, requries date
 
 ## backend
 wip
