@@ -1,8 +1,20 @@
 const Joi = require('joi');
 const { listings, addListing, reserve } = require('./Listings');
 const express = require('express');
+const mysql = require('mysql');
 const app = express();
 
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'root',
+  database: 'airbnb'
+});
+
+connection.connect((err) => {
+    if (err) throw err;
+    console.log('Connected!');
+  });
 // middleware
 app.use(express.json());
 
@@ -20,12 +32,44 @@ app.get('/api/listings/:id', (req, res) => {
 });
 
 // post to listings
+app.post('/listings/makeReservation/', function(req, res){
+    console.log(req.body);
+    // INSERT INTO Reserved (startDate, endDate)
+    // VALUES( ${req.body.startDate}, ${req.body.endDate} 
+    const reservationQuery = `INSERT INTO Reserved (startDate, endDate, listing_id) VALUES( '${req.body.startDate}', '${req.body.endDate}', ${req.body.listing_id})`;
+    console.log(reservationQuery, 'reservationQuery');
+    connection.query(reservationQuery, function (error, results, fields) {
+        console.log(error, ' error');
+        console.log(results, 'results');
+        res.send({id: results.insertId});
+    });
+    
+    // const { error } = validateListing(req.body);
+    // if (error) return res.status(400).send(result.error.details[0].message);
+    // addListing(listing = req.body);
+    // res.send(listings);
+});
+
+// add listing
 app.post('/listings/add', function(req, res){
     console.log(req.body);
+    
     const { error } = validateListing(req.body);
     if (error) return res.status(400).send(result.error.details[0].message);
     addListing(listing = req.body);
     res.send(listings);
+});
+
+// list reservations
+app.get('/reservations/getAllReservations', function(req, res){
+    console.log(req.body);
+    const reservationQuery = `SELECT * FROM Reserved`;
+    console.log(reservationQuery, 'reservationQuery');
+    connection.query(reservationQuery, function (error, results, fields) {
+        console.log(error, ' error');
+        console.log(results, 'results');
+        res.send(results);
+    });
 });
 
 // post to reserve
