@@ -37,6 +37,13 @@ function addListing(listing) {
     listings.push(entry);
 }
 
+// on board customer
+// function addCustomer(customer) {
+//     const customer = {
+
+//     }
+// }
+
 // reserve listing
 function reserve(listing, reservedDates) {
     // find entry
