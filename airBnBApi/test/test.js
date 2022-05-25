@@ -15,11 +15,11 @@ connection.connect((err) => {
     console.log('Connected!');
 });
 
-// function haveSameData()
 it('make reservation', function(done) {
     const requestBody = {
             "startDate": "2022-05-24",
-            "endDate": "2022-05-25"
+            "endDate": "2022-05-25",
+            "listing_id": 1
         }
     request.post({
         url: 'http://localhost:3000/listings/makeReservation/',
@@ -27,25 +27,30 @@ it('make reservation', function(done) {
         json: requestBody
     }, function(error, response, body) {
         const jsonRes = response.body;
-        console.log(jsonRes, 'jsonRes');
         const testQuery = `SELECT * FROM Reserved WHERE Id = ${jsonRes.id}`;
         console.log(testQuery, ' testQuery');
         connection.query(testQuery, function(error,  results, fields){
-            console.log(error, ' error');
-            console.log(results, 'results');
             const [reservation] = results;
-            console.log(reservation, ' reservation');
-            const startDateEval = new Date(Date.parse(reservation.startDate)).toISOString().split('T')[0];
-            const endDateEval = new Date(Date.parse(reservation.endDate)).toISOString().split('T')[0];
-            console.log(startDateEval, ' startDateEval');
             const expectation = {
                 Id: reservation.Id
             }
-            console.log(expectation, ' expectation');
-            console.log()
             expect(reservation.Id).to.equal(jsonRes.id);
             done();
         });
-        
+    });
+});
+
+it('list reservations', function(done) {
+request.get({
+    url: 'http://localhost:3000/reservations/getAllReservations',
+    headers: {'content-type': 'application/json'},
+}, function(error, response, body) {
+    const jsonRes = response.body;
+    const testQuery = `SELECT * FROM Reserved`;
+        connection.query(testQuery, function(error,  results, fields){
+            console.log(results, ' results');
+            expect(results.length).to.equal(JSON.parse(jsonRes).length);
+            done();
+        });
     });
 });
