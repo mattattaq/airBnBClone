@@ -19,7 +19,7 @@ it('make reservation', function (done) {
     const requestBody = {
         "startDate": "2022-05-24",
         "endDate": "2022-05-25",
-        "listing_id": 1
+        "listing_ids": [1,2]
     }
     request.post({
         url: 'http://localhost:3000/listings/makeReservation/',
@@ -27,14 +27,14 @@ it('make reservation', function (done) {
         json: requestBody
     }, function (error, response, body) {
         const jsonRes = response.body;
-        const testQuery = `SELECT * FROM Reserved WHERE Id = ${jsonRes.id}`;
+        const testQuery = `SELECT * FROM Reserved WHERE Id = ${jsonRes.reservationId}`;
         console.log(testQuery, ' testQuery');
         connection.query(testQuery, function (error, results, fields) {
             const [reservation] = results;
             const expectation = {
                 Id: reservation.Id
             }
-            expect(reservation.Id).to.equal(jsonRes.id);
+            expect(reservation.Id).to.equal(jsonRes.reservationId);
             done();
         });
     });

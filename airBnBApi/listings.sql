@@ -10,7 +10,14 @@ CREATE TABLE Reserved (
     Id INT AUTO_INCREMENT,
     startDate date,
     endDate date,
-    PRIMARY KEY(`Id`),
+    PRIMARY KEY(`Id`)    
+);
+
+CREATE TABLE ListingReserve (
+    Id INT AUTO_INCREMENT,
     listing_id INT NOT NULL,
-    FOREIGN KEY (listing_id) REFERENCES Listings(`Id`)
+    FOREIGN KEY (listing_id) REFERENCES Listings(`Id`),
+    reserved_id INT NOT NULL,
+    FOREIGN KEY (reserved_id) REFERENCES Reserved(`Id`),
+    PRIMARY KEY(`Id`)
 );

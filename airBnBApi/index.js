@@ -2,6 +2,7 @@ const Joi = require('joi');
 const { listings, addListing, reserve } = require('./Listings');
 const express = require('express');
 const mysql = require('mysql');
+const { request } = require('express');
 const app = express();
 
 const connection = mysql.createConnection({
@@ -36,12 +37,23 @@ app.post('/listings/makeReservation/', function (req, res) {
     console.log(req.body);
     // INSERT INTO Reserved (startDate, endDate)
     // VALUES( ${req.body.startDate}, ${req.body.endDate} 
-    const reservationQuery = `INSERT INTO Reserved (startDate, endDate, listing_id) VALUES( '${req.body.startDate}', '${req.body.endDate}', ${req.body.listing_id})`;
+    const reservationQuery = `INSERT INTO Reserved (startDate, endDate) VALUES( '${req.body.startDate}', '${req.body.endDate}')`;
     console.log(reservationQuery, 'reservationQuery');
+
     connection.query(reservationQuery, function (error, results, fields) {
         console.log(error, ' error');
         console.log(results, 'results');
-        res.send({ id: results.insertId });
+        let insertedListingReserveIds = [];
+        req.body.listing_ids.forEach(listing => {
+            const listingQuery = `INSERT INTO ListingReserve (listing_id, reserved_id) VALUES( '${listing}', '${results.insertId}')`;
+            console.log(listingQuery, ' listingQuery');
+            connection.query(listingQuery, function (error, results, fields) {
+                console.log(error, ' error');
+                console.log(results, 'results');
+                insertedListingReserveIds.push(results.insertId);
+            });
+        })
+        res.send({ reservationId: results.insertId, listingIds: insertedListingReserveIds });
     });
 
     // const { error } = validateListing(req.body);
