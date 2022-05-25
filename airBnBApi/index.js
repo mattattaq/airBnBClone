@@ -5,10 +5,14 @@ const mysql = require('mysql');
 const { request } = require('express');
 const app = express();
 
+console.log(process.env.MYSQL_HOST, ' mysql host');
+console.log(process.env.MYSQL_USER, ' mysql user');
+console.log(process.env.MYSQL_PASSWORD, ' mysql pass');
+
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
     database: 'airbnb'
 });
 
